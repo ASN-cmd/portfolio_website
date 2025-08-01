@@ -32,16 +32,12 @@ jobs:
         aws-region: us-east-1
 
     - name: Deploy to S3
-      run: |
-        aws s3 sync ./dist s3://asnportfolio --delete \
-          --content-type-by-extension '{
-            ".html": "text/html",
-            ".css": "text/css",
-            ".js": "text/javascript",
-            ".png": "image/png",
-            ".jpg": "image/jpeg",
-            ".jpeg": "image/jpeg",
-            ".gif": "image/gif",
-            ".svg": "image/svg+xml",
-            ".ico": "image/x-icon"
-          }'
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --delete
+      env:
+        AWS_S3_BUCKET: asnportfolio
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: us-east-1
+        SOURCE_DIR: 'dist'
